@@ -1,0 +1,21 @@
+doctrine_cache:
+    providers:
+        my_array_cache:
+            type: array
+        my_filesystem_cache:
+            file_system:
+                extension: fsc
+                directory: Tests/tmp
+        my_memcache_cache:
+            type: memcache
+        my_memcached_cache:
+            type: memcached
+        my_php_file_cache:
+            php_file:
+                extension: fsc
+                directory: Tests/tmp
+        my_redis_cache:
+            type: redis
+
+doctrine_cache_extension:
+    default_lifetime: 100
