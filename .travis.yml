@@ -2,9 +2,9 @@ language: php
 
 php:
   - "5.6"
+
 services:
-    - riak
-    - mongodb
+    - memcache
     - memcached
     - redis-server
     

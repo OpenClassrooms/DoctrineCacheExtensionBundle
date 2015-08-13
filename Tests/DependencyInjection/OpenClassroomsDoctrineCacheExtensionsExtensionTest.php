@@ -30,10 +30,8 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
             ['Doctrine\Common\Cache\FilesystemCache', 'doctrine_cache.providers.my_filesystem_cache', 'filesystem'],
             ['Doctrine\Common\Cache\MemcacheCache', 'doctrine_cache.providers.my_memcache_cache', 'memcache'],
             ['Doctrine\Common\Cache\MemcachedCache', 'doctrine_cache.providers.my_memcached_cache', 'memcached'],
-            ['Doctrine\Common\Cache\MongoDBCache', 'doctrine_cache.providers.my_mongodb_cache', 'mongodb'],
             ['Doctrine\Common\Cache\PhpFileCache', 'doctrine_cache.providers.my_php_file_cache', 'phpfile'],
             ['Doctrine\Common\Cache\RedisCache', 'doctrine_cache.providers.my_redis_cache', 'redis'],
-            ['Doctrine\Common\Cache\RiakCache', 'doctrine_cache.providers.my_riak_cache', 'riak'],
         ];
     }
 
@@ -68,14 +66,8 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
         if ('memcached' === $type && !extension_loaded('memcached')) {
             $this->markTestSkipped('The '.__CLASS__.' requires the use of memcached');
         }
-        if ('mongodb' === $type && !extension_loaded('mongo')) {
-            $this->markTestSkipped('The '.__CLASS__.' requires the use of mongo');
-        }
         if ('redis' === $type && !extension_loaded('redis')) {
             $this->markTestSkipped('The '.__CLASS__.' requires the use of redis');
-        }
-        if ('riak' === $type && !extension_loaded('riak')) {
-            $this->markTestSkipped('The '.__CLASS__.' requires the use of riak');
         }
     }
 
