@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/OpenClassrooms/DoctrineCacheExtensionBundle.svg)](https://travis-ci.org/OpenClassrooms/DoctrineCacheExtensionBundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14/mini.png)](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14)
-[![Coverage Status](https://coveralls.io/repos/OpenClassrooms/CacheBundle/badge.png?branch=master)](https://coveralls.io/r/OpenClassrooms/CacheBundle?branch=master)
+[![Coverage Status](https://coveralls.io/repos/OpenClassrooms/DoctrineCacheExtension/badge.svg?branch=master&service=github)](https://coveralls.io/github/OpenClassrooms/DoctrineCacheExtension?branch=master)
 
 Doctrine Cache Extension Bundle adds features to Doctrine Cache implementation
 - Default lifetime
