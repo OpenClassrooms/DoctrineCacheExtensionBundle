@@ -2,7 +2,12 @@ language: php
 
 php:
   - "5.6"
-
+services:
+    - riak
+    - mongodb
+    - memcached
+    - redis-server
+    
 before_script:
   - composer self-update
   - composer install --no-scripts --no-interaction --dev
