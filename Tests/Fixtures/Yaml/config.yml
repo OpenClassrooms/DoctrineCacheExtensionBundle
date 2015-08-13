@@ -16,6 +16,10 @@ doctrine_cache:
                 directory: Tests/tmp
         my_redis_cache:
             type: redis
+        my_riak_cache:
+            type: riak
+        my_mongodb_cache:
+            type: mongodb
 
 doctrine_cache_extension:
     default_lifetime: 100

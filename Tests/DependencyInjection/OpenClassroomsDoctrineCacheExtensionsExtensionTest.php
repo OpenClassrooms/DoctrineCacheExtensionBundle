@@ -26,12 +26,14 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
     public static function cacheProvider()
     {
         return [
-            ['Doctrine\Common\Cache\ArrayCache', 'doctrine_cache.providers.my_array_cache'],
-            ['Doctrine\Common\Cache\FilesystemCache', 'doctrine_cache.providers.my_filesystem_cache'],
-            ['Doctrine\Common\Cache\MemcacheCache', 'doctrine_cache.providers.my_memcache_cache'],
-            ['Doctrine\Common\Cache\MemcachedCache', 'doctrine_cache.providers.my_memcached_cache'],
-            ['Doctrine\Common\Cache\PhpFileCache', 'doctrine_cache.providers.my_php_file_cache'],
-            ['Doctrine\Common\Cache\RedisCache', 'doctrine_cache.providers.my_redis_cache'],
+            ['Doctrine\Common\Cache\ArrayCache', 'doctrine_cache.providers.my_array_cache', 'array'],
+            ['Doctrine\Common\Cache\FilesystemCache', 'doctrine_cache.providers.my_filesystem_cache', 'filesystem'],
+            ['Doctrine\Common\Cache\MemcacheCache', 'doctrine_cache.providers.my_memcache_cache', 'memcache'],
+            ['Doctrine\Common\Cache\MemcachedCache', 'doctrine_cache.providers.my_memcached_cache', 'memcached'],
+            ['Doctrine\Common\Cache\MongoDBCache', 'doctrine_cache.providers.my_mongodb_cache', 'mongodb'],
+            ['Doctrine\Common\Cache\PhpFileCache', 'doctrine_cache.providers.my_php_file_cache', 'phpfile'],
+            ['Doctrine\Common\Cache\RedisCache', 'doctrine_cache.providers.my_redis_cache', 'redis'],
+            ['Doctrine\Common\Cache\RiakCache', 'doctrine_cache.providers.my_riak_cache', 'riak'],
         ];
     }
 
@@ -50,11 +52,31 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
      * @test
      * @dataProvider cacheProvider
      */
-    public function CacheProviderDecorator($expectedCache, $inputServiceName)
+    public function CacheProviderDecorator($expectedCache, $inputServiceName, $type)
     {
+        $this->checkExtension($type);
         /** @var CacheProviderDecorator $cacheProviderDecorator */
         $cacheProviderDecorator = $this->container->get($inputServiceName);
         $this->assertCacheProviderDecorator($expectedCache, $cacheProviderDecorator);
+    }
+
+    private function checkExtension($type)
+    {
+        if ('memcache' === $type && !extension_loaded('memcache')) {
+            $this->markTestSkipped('The '.__CLASS__.' requires the use of memcache');
+        }
+        if ('memcached' === $type && !extension_loaded('memcached')) {
+            $this->markTestSkipped('The '.__CLASS__.' requires the use of memcached');
+        }
+        if ('mongodb' === $type && !extension_loaded('mongo')) {
+            $this->markTestSkipped('The '.__CLASS__.' requires the use of mongo');
+        }
+        if ('redis' === $type && !extension_loaded('redis')) {
+            $this->markTestSkipped('The '.__CLASS__.' requires the use of redis');
+        }
+        if ('riak' === $type && !extension_loaded('riak')) {
+            $this->markTestSkipped('The '.__CLASS__.' requires the use of riak');
+        }
     }
 
     private function assertCacheProviderDecorator($expectedCache, CacheProviderDecorator $cacheProviderDecorator)
