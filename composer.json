@@ -21,7 +21,7 @@
   "require": {
     "php": ">=5.6",
     "doctrine/doctrine-cache-bundle": "~1.0",
-    "openclassrooms/doctrine-cache-extension": "1.0.x-dev"
+    "openclassrooms/doctrine-cache-extension": "1.0.*@dev"
   },
   "require-dev": {
     "mockery/mockery": "dev-master",
