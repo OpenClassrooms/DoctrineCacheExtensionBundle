@@ -2,11 +2,13 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14/mini.png)](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14)
 [![Coverage Status](https://coveralls.io/repos/OpenClassrooms/DoctrineCacheExtension/badge.svg?branch=master&service=github)](https://coveralls.io/github/OpenClassrooms/DoctrineCacheExtension?branch=master)
 
-Doctrine Cache Extension Bundle adds features to Doctrine Cache implementation
-- Default lifetime
-- Fetch with a namespace
-- Save with a namespace
-- Cache invalidation through namespace strategy
+The DoctrineCacheExtensionBundle provides integration of the DoctrineCacheExtension library.
+DoctrineCacheExtension provides facilities to manage cache managment:
+* Default lifetime
+* Fetch with a namespace
+* Save with a namespace
+* Cache invalidation through namespace strategy
+* Data collector available in the profiler (not implemented yet) 
 
 See [OpenClassrooms/DoctrineCacheExtension](https://github.com/OpenClassrooms/DoctrineCacheExtension) for more details.
 
@@ -38,7 +40,7 @@ $bundles = array(
 ## Configuration
 ```yaml
 doctrine_cache_extension:
-    default_lifetime: 10    (optional, default = 0)
+    default_lifetime: 10 #optional, default = 0
 ```
 ## Usage
 The configured cache is available as ```openclassrooms.cache.cache``` service:
@@ -71,6 +73,6 @@ $cacheProvider = $builder
     ->build();
 ```
 
-See [OpenClassrooms/Cache](https://github.com/OpenClassrooms/Cache) for more details.
+See [Doctrine/DoctrineCacheBundle](https://github.com/doctrine/DoctrineCacheBundle) for more details.
 
 
