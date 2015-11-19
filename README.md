@@ -26,26 +26,40 @@ or by adding the package to the composer.json file directly.
 }
 ```
 
-After the package has been installed, add the bundle to the AppKernel.php file:
+After the package has been installed, add the bundle and the DoctrineCacheBundle to the AppKernel.php file:
 
 ```php
 // in AppKernel::registerBundles()
-$bundles = array(
+$bundles = [
     // ...
+    new new \Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle();
     new OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\OpenClassroomsDoctrineCacheExtensionBundle(),
     // ...
-);
+)];
 ```
 
 ## Configuration
 ```yaml
+# app/config/config.yml
+
 doctrine_cache_extension:
     default_lifetime: 10 #optional, default = 0
 ```
+To configure the cache providers, use the [DoctrineCacheBundle configuration](https://github.com/doctrine/DoctrineCacheBundle#provider-configuration).
+For example :
+
+```yaml
+# app/config/config.yml
+
+doctrine_cache:
+    providers:
+        a_cache_provider:
+            type: array
+```
+
 ## Usage
-The configured cache is available as ```openclassrooms.cache.cache``` service:
 ```php
-$cache = $container->get('openclassrooms.cache.cache');
+$cache = $container->get('doctrine_cache.providers.a_cache_provider');
 
 $cache->fetch($id);
 $cache->fetchWithNamespace($id, $namespaceId);
@@ -54,25 +68,3 @@ $cache->saveWithNamespace($id, $data, $namespaceId);
 $cache->invalidate($namespaceId);
 
 ```
-
-The configured cache provider is available as ```openclassrooms.cache.cache_provider``` service:
-```php
-$cacheProvider = $container->get('openclassrooms.cache.cache_provider');
-```
-
-The cache provider builder is available as ```openclassrooms.cache.cache_provider``` service:
-```php
-$builder = $container->get('openclassrooms.cache.cache_provider_builder');
-
-// Redis
-$cacheProvider = $builder
-    ->create(CacheProviderType::REDIS)
-    ->withHost('127.0.0.1')
-    ->withPort(6379) // Default 6379
-    ->withTimeout(0.0) // Default 0.0
-    ->build();
-```
-
-See [Doctrine/DoctrineCacheBundle](https://github.com/doctrine/DoctrineCacheBundle) for more details.
-
-
