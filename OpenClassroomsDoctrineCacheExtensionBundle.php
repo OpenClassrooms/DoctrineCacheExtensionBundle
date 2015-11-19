@@ -3,6 +3,7 @@
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle;
 
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\Compiler\ServiceCompilerPass;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\OpenClassroomsDoctrineCacheExtensionExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -25,4 +26,13 @@ class OpenClassroomsDoctrineCacheExtensionBundle extends Bundle
     {
         return 'DoctrineCacheBundle';
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContainerExtension()
+    {
+        return new OpenClassroomsDoctrineCacheExtensionExtension();
+}
+
 }
