@@ -2,7 +2,7 @@
 
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Services;
 
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\CacheCollectedData\FetchCacheCollectedData;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\FetchCacheCollectedData;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

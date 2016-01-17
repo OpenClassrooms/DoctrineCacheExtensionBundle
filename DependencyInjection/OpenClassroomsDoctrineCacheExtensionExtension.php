@@ -22,6 +22,17 @@ class OpenClassroomsDoctrineCacheExtensionExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
+        if ($this->isDebug($container)) {
+            $loader->load('services_debug.xml');
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDebug(ContainerBuilder $container)
+    {
+        return $container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug');
     }
 
     /**

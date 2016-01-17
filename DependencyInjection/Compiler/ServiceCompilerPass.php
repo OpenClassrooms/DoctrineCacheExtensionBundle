@@ -35,15 +35,33 @@ class ServiceCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $factoryClass = $this->getFactoryClass($container);
         foreach (self::$types as $type) {
             $definition = $container->findDefinition('doctrine_cache.abstract.'.$type);
-            $definition->setFactory(
-                array(
-                    'OpenClassrooms\DoctrineCacheExtension\CacheProviderDecoratorFactory',
-                    'create',
-                )
-            );
+            $definition->setFactory([$factoryClass, 'create']);
             $definition->addArgument($type);
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getFactoryClass(ContainerBuilder $container)
+    {
+        if ($this->isDebug($container)) {
+            return $container->findDefinition('oc.doctrine_cache_extensions.debug.cache_provider_decorator_factory')
+                ->getClass();
+        } else {
+            return $container->findDefinition('oc.doctrine_cache_extensions.cache_provider_decorator_factory')
+                ->getClass();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDebug(ContainerBuilder $container)
+    {
+        return $container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug');
     }
 }

@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('default_lifetime')->defaultValue(0)->end()
             ->end();
+
         return $treeBuilder;
     }
 }

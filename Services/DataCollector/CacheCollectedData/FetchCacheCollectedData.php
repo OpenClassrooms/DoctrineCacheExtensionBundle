@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\CacheCollectedData;
+namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>

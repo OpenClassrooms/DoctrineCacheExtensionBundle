@@ -86,8 +86,41 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
      */
     public function GetCacheProviderDecoratorFactory()
     {
-        $factory = $this->container->get('doctrine_cache_extensions.cache_provider_decorator_factory');
+        $factory = $this->container->get('oc.doctrine_cache_extensions.cache_provider_decorator_factory');
         $this->assertAttributeEquals(100, 'defaultLifetime', $factory);
+    }
+
+    /**
+     * @test
+     */
+    public function Debug_GetCacheProviderDecoratorFactory()
+    {
+        $container = $this->buildContainer();
+        $container->setParameter('kernel.debug', true);
+        $container->compile();
+        $factory = $container->get('oc.doctrine_cache_extensions.cache_provider_decorator_factory');
+        $this->assertAttributeEquals(100, 'defaultLifetime', $factory);
+        $this->assertInstanceOf('OpenClassrooms\DoctrineCacheExtension\CacheProviderDecoratorFactory', $factory);
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    private function buildContainer()
+    {
+        $container = new ContainerBuilder();
+        $extension = new OpenClassroomsDoctrineCacheExtensionExtension();
+        $container->registerExtension($extension);
+        $container->registerExtension(new DoctrineCacheExtension());
+        $container->loadFromExtension('doctrine_cache_extension');
+
+        $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
+        $bundle->build($container);
+
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Fixtures/Yaml/'));
+        $loader->load('config.yml');
+
+        return $container;
     }
 
     /**
@@ -95,17 +128,7 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
      */
     protected function setUp()
     {
-        $this->container = new ContainerBuilder();
-        $extension = new OpenClassroomsDoctrineCacheExtensionExtension();
-        $this->container->registerExtension($extension);
-        $this->container->registerExtension(new DoctrineCacheExtension());
-        $this->container->loadFromExtension('doctrine_cache_extension');
-
-        $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
-        $bundle->build($this->container);
-
-        $loader = new YamlFileLoader($this->container, new FileLocator(__DIR__.'/../Fixtures/Yaml/'));
-        $loader->load('config.yml');
+        $this->container = $this->buildContainer();
         $this->container->compile();
     }
 }

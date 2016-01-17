@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services;
+namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector;
 
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\CacheCollectedData\CacheCollectedData;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\CacheCollectedData\FetchWithNamespaceCacheCollectedData;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\CacheCollectedData;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\FetchWithNamespaceCacheCollectedData;
 use OpenClassrooms\DoctrineCacheExtension\AbstractCacheProviderDecorator;
 use OpenClassrooms\DoctrineCacheExtension\CacheProviderDecorator;
 use Symfony\Component\Stopwatch\Stopwatch;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\CacheCollectedData;
+namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData;
 
 use Symfony\Component\Stopwatch\Stopwatch;
 
