@@ -2,8 +2,6 @@
 
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData;
 
-use Symfony\Component\Stopwatch\Stopwatch;
-
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
@@ -15,26 +13,34 @@ abstract class CacheCollectedData
 
     const FETCH_WITH_NAMESPACE = 'fetchWithNamespace';
 
+    const SAVE = 'save';
+
+    const SAVE_WITH_NAMESPACE = 'saveWithNamespace';
+
     /**
      * @var string
      */
     protected $data;
 
     /**
-     * @var Stopwatch
+     * @var string
      */
-    protected $duration;
+    protected $providerId;
+
+    /**
+     * @var float
+     */
+    protected $start;
+
+    /**
+     * @var float
+     */
+    protected $stop;
 
     /**
      * @var string
      */
     protected $type;
-
-    public function __construct($data, $duration)
-    {
-        $this->data = $data;
-        $this->duration = $duration;
-    }
 
     /**
      * @return string
@@ -44,12 +50,40 @@ abstract class CacheCollectedData
         return $this->data;
     }
 
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
     /**
-     * @return int
+     * @return float
      */
     public function getDuration()
     {
-        return $this->duration;
+        return $this->stop - $this->start;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProviderId()
+    {
+        return $this->providerId;
+    }
+
+    public function setProviderId($providerId)
+    {
+        $this->providerId = $providerId;
+    }
+
+    public function setStart($start)
+    {
+        $this->start = $start;
+    }
+
+    public function setStop($stop)
+    {
+        $this->stop = $stop;
     }
 
     /**

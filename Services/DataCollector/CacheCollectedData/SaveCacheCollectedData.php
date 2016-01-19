@@ -5,14 +5,14 @@ namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollec
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class FetchCacheCollectedData extends CacheCollectedData
+class SaveCacheCollectedData extends CacheCollectedData
 {
     /**
      * @var string
      */
     protected $id;
 
-    protected $type = self::FETCH;
+    protected $type = self::SAVE;
 
     /**
      * @return string

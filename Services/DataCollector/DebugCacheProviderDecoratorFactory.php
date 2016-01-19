@@ -20,6 +20,10 @@ class DebugCacheProviderDecoratorFactory extends CacheProviderDecoratorFactory
      */
     public static function create($type, ...$args)
     {
+        if (null === self::$stopwatch) {
+            self::$stopwatch = new Stopwatch();
+        }
+
         return new DebugCacheProviderDecorator(parent::create($type, ...$args), self::$stopwatch);
     }
 

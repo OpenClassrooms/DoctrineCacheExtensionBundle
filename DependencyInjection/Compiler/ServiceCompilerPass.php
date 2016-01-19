@@ -41,6 +41,16 @@ class ServiceCompilerPass implements CompilerPassInterface
             $definition->setFactory([$factoryClass, 'create']);
             $definition->addArgument($type);
         }
+
+        if ($this->isDebug($container)) {
+
+            foreach ($container->getServiceIds() as $serviceId) {
+                if (strpos($serviceId, 'doctrine_cache.providers.') === 0) {
+                    $definition = $container->findDefinition($serviceId);
+                    $definition->addMethodCall('setProviderId', [$serviceId]);
+                }
+            }
+        }
     }
 
     /**

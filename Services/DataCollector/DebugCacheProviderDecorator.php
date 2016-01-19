@@ -3,7 +3,7 @@
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector;
 
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\CacheCollectedData;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\FetchWithNamespaceCacheCollectedData;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\CacheCollectedDataBuilder;
 use OpenClassrooms\DoctrineCacheExtension\AbstractCacheProviderDecorator;
 use OpenClassrooms\DoctrineCacheExtension\CacheProviderDecorator;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -13,8 +13,10 @@ use Symfony\Component\Stopwatch\Stopwatch;
  */
 class DebugCacheProviderDecorator extends CacheProviderDecorator
 {
+    const STOPWATCH_EVENT = 'doctrine_cache_extension_bundle';
+
     /**
-     * @var array
+     * @var CacheCollectedData[]
      */
     public static $collectedData = [];
 
@@ -29,13 +31,29 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
     public static $stopwatch;
 
     /**
+     * @var CacheCollectedDataBuilder
+     */
+    private $cacheCollectedDataBuilder;
+
+    /**
      * @var AbstractCacheProviderDecorator
      */
     private $cacheProviderDecorator;
 
+    /**
+     * @var string
+     */
+    private $providerId;
+
+    /**
+     * @var string
+     */
+    private $providerType;
+
     public function __construct(AbstractCacheProviderDecorator $cacheProviderDecorator, Stopwatch $stopwatch)
     {
         $this->cacheProviderDecorator = $cacheProviderDecorator;
+        $this->cacheCollectedDataBuilder = new CacheCollectedDataBuilder();
         self::$stopwatch = $stopwatch;
     }
 
@@ -47,21 +65,81 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
         return self::$collectedData;
     }
 
+    public function setProviderId($providerId)
+    {
+        $this->providerId = $providerId;
+    }
+
+    public function setProviderType(string $providerType)
+    {
+        $this->providerType = $providerType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetch($id)
+    {
+        $start = $this->startQuery();
+        $data = $this->cacheProviderDecorator->fetch($id);
+        $stop = $this->stopQuery();
+
+        self::$collectedData[self::$callId++] = $this->create(CacheCollectedData::FETCH)
+            ->withData($data)
+            ->withId($id)
+            ->withStart($start)
+            ->withStop($stop)
+            ->build();
+
+        return $data;
+    }
+
+    /**
+     * @return float
+     */
+    private function startQuery()
+    {
+        self::$stopwatch->start('oc.doctrine_cache_extension_bundle', 'oc.doctrine_cache_extension_bundle');
+
+        return microtime(true);
+    }
+
+    /**
+     * @return float
+     */
+    private function stopQuery()
+    {
+        self::$stopwatch->stop('oc.doctrine_cache_extension_bundle');
+
+        return microtime(true);
+    }
+
+    /**
+     * @return CacheCollectedDataBuilder
+     */
+    private function create($type)
+    {
+        return $this->cacheCollectedDataBuilder
+            ->create($type)
+            ->withProviderId($this->providerId);
+    }
+
     /**
      * @inheritDoc
      */
     public function fetchWithNamespace($id, $namespaceId = null)
     {
-        self::$stopwatch->start('doctrine_cache_extension_bundle');
+        $start = $this->startQuery();
         $data = $this->cacheProviderDecorator->fetchWithNamespace($id, $namespaceId);
-        self::$stopwatch->stop('doctrine_cache_extension_bundle');
+        $stop = $this->stopQuery();
 
-        self::$collectedData[self::$callId++] = new FetchWithNamespaceCacheCollectedData(
-            $id,
-            $namespaceId,
-            $data,
-            self::$stopwatch
-        );
+        self::$collectedData[self::$callId++] = $this->create(CacheCollectedData::FETCH_WITH_NAMESPACE)
+            ->withData($data)
+            ->withId($id)
+            ->withNamespaceId($namespaceId)
+            ->withStart($start)
+            ->withStop($stop)
+            ->build();
 
         return $data;
     }
@@ -71,7 +149,17 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
      */
     public function invalidate($namespaceId)
     {
-        return $this->cacheProviderDecorator->invalidate($namespaceId);
+        $start = $this->startQuery();
+        $invalidated = $this->cacheProviderDecorator->invalidate($namespaceId);
+        $stop = $this->stopQuery();
+
+        self::$collectedData[self::$callId++] = $this->create(CacheCollectedData::INVALIDATE)
+            ->withNamespaceId($namespaceId)
+            ->withStart($start)
+            ->withStop($stop)
+            ->build();
+
+        return $invalidated;
     }
 
     /**
@@ -79,7 +167,18 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
      */
     public function save($id, $data, $lifeTime = null)
     {
-        return $this->cacheProviderDecorator->save($id, $data, $lifeTime);
+        $start = $this->startQuery();
+        $saved = $this->cacheProviderDecorator->save($id, $data, $lifeTime);
+        $stop = $this->stopQuery();
+
+        self::$collectedData[self::$callId++] = $this->create(CacheCollectedData::SAVE)
+            ->withData($data)
+            ->withId($id)
+            ->withStart($start)
+            ->withStop($stop)
+            ->build();
+
+        return $saved;
     }
 
     /**
@@ -87,54 +186,18 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
      */
     public function saveWithNamespace($id, $data, $namespaceId = null, $lifeTime = null)
     {
-        return $this->cacheProviderDecorator->saveWithNamespace($id, $data, $namespaceId, $lifeTime);
-    }
+        $start = $this->startQuery();
+        $saved = $this->cacheProviderDecorator->saveWithNamespace($id, $data, $namespaceId, $lifeTime);
+        $stop = $this->stopQuery();
 
-    /**
-     * @inheritDoc
-     */
-    protected function doFetch($id)
-    {
-        return $this->cacheProviderDecorator->doFetch($id);
-    }
+        self::$collectedData[self::$callId++] = $this->create(CacheCollectedData::SAVE_WITH_NAMESPACE)
+            ->withData($data)
+            ->withId($id)
+            ->withNamespaceId($namespaceId)
+            ->withStart($start)
+            ->withStop($stop)
+            ->build();
 
-    /**
-     * @inheritDoc
-     */
-    protected function doContains($id)
-    {
-        return $this->cacheProviderDecorator->doContains($id);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function doSave($id, $data, $lifeTime = 0)
-    {
-        return $this->cacheProviderDecorator->doSave($id, $data, $lifeTime);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function doDelete($id)
-    {
-        return $this->cacheProviderDecorator->doDelete($id);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function doFlush()
-    {
-        return $this->cacheProviderDecorator->doFlush();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function doGetStats()
-    {
-        return $this->cacheProviderDecorator->doGetStats();
+        return $saved;
     }
 }

@@ -2,13 +2,16 @@
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="oc.doctrine_cache_extensions.debug.cache_provider_decorator_factory" class="OpenClassrooms\DoctrineCacheExtension\CacheProviderDecoratorFactory">
+        <service id="oc.doctrine_cache_extensions.debug.cache_provider_decorator_factory" class="OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\DebugCacheProviderDecoratorFactory">
             <call method="setDefaultLifetime">
                 <argument>%doctrine_cache_extension.default_lifetime%</argument>
             </call>
+            <call method="setStopwatch">
+                <argument type="service" id="debug.stopwatch"/>
+            </call>
         </service>
         <service id="oc.doctrine_cache_extensions.services.data_collector.cache_data_collector" class="OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheDataCollector" public="false">
-            <tag name="data_collector"/>
+            <tag name="data_collector" template="@OpenClassroomsDoctrineCacheExtension/Collector/toolbar.html.twig" id="oc.doctrine_cache_extensions.services.data_collector.cache_data_collector"/>
         </service>
     </services>
 </container>

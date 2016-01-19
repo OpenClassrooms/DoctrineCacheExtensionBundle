@@ -5,14 +5,14 @@ namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollec
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class InvalidateCacheCollectedData extends CacheCollectedData
+class SaveWithNamespaceCacheCollectedData extends SaveCacheCollectedData
 {
     /**
      * @var string
      */
     protected $namespaceId;
 
-    protected $type = self::INVALIDATE;
+    protected $type = self::SAVE_WITH_NAMESPACE;
 
     /**
      * @return string
@@ -22,21 +22,8 @@ class InvalidateCacheCollectedData extends CacheCollectedData
         return $this->namespaceId;
     }
 
-    public function setNamespaceId(string $namespaceId)
+    public function setNamespaceId($namespaceId)
     {
         $this->namespaceId = $namespaceId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }
