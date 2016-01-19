@@ -68,3 +68,6 @@ $cache->saveWithNamespace($id, $data, $namespaceId);
 $cache->invalidate($namespaceId);
 
 ```
+## Profiler
+The bundle provides data in the profiler such as number of calls, kind of calls ...
+(picture)
