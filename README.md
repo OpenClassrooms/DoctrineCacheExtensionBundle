@@ -2,8 +2,8 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14/mini.png)](https://insight.sensiolabs.com/projects/c4488874-8c9c-40db-9b2e-9a8f510bbc14)
 [![Coverage Status](https://coveralls.io/repos/OpenClassrooms/DoctrineCacheExtension/badge.svg?branch=master&service=github)](https://coveralls.io/github/OpenClassrooms/DoctrineCacheExtension?branch=master)
 
-The DoctrineCacheExtensionBundle provides integration of the DoctrineCacheExtension library.
-DoctrineCacheExtension provides facilities to manage cache managment:
+The DoctrineCacheExtensionBundle offers integration of the DoctrineCacheExtension library.
+DoctrineCacheExtension provides functionality to handle cache management:
 * Default lifetime
 * Fetch with a namespace
 * Save with a namespace
@@ -16,7 +16,7 @@ See [OpenClassrooms/DoctrineCacheExtension](https://github.com/OpenClassrooms/Do
 This bundle can be installed using composer:
 
 ```composer require openclassrooms/doctrine-cache-extension-bundle```
-or by adding the package to the composer.json file directly.
+or by adding the package directly to the composer.json file.
 
 ```json
 {
@@ -46,7 +46,7 @@ doctrine_cache_extension:
     default_lifetime: 10 #optional, default = 0
 ```
 To configure the cache providers, use the [DoctrineCacheBundle configuration](https://github.com/doctrine/DoctrineCacheBundle#provider-configuration).
-For example :
+For example:
 
 ```yaml
 # app/config/config.yml
@@ -69,5 +69,5 @@ $cache->invalidate($namespaceId);
 
 ```
 ## Profiler
-The bundle provides data in the profiler such as number of calls, kind of calls ...
+The bundle provides data in the profiler such as the number of calls, kinds of calls, and more.
 (picture)
