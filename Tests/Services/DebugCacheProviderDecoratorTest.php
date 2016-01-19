@@ -2,24 +2,21 @@
 
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Services;
 
-use Doctrine\Common\Cache\CacheProvider;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\CacheCollectedData;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\FetchCacheCollectedData;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\FetchWithNamespaceCacheCollectedData;
-use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\InvalidateCacheCollectedData;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\DebugCacheProviderDecorator;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\DebugCacheProviderDecoratorFactory;
-use Symfony\Component\Stopwatch\Stopwatch;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\CacheCollectedDataTestCase;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\FetchCacheCollectedDataStub;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\FetchWithNamespaceCacheCollectedDataStub;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\InvalidateCacheCollectedDataStub;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\SaveCacheCollectedDataStub;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\SaveWithNamespaceCacheCollectedDataStub;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
 class DebugCacheProviderDecoratorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var CacheProvider
-     */
-    private $cacheProvider;
+    use CacheCollectedDataTestCase;
 
     /**
      * @var DebugCacheProviderDecorator
@@ -29,61 +26,70 @@ class DebugCacheProviderDecoratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function FetchWithNamespace_StoreInformation()
+    public function fetch_storeInformation()
     {
-        $this->cacheProvider->save('namespaceId', 'namespace_id');
-        $this->cacheProvider->save('namespace_idid', 'data-test');
+        $this->decorator->fetch(FetchCacheCollectedDataStub::ID);
+        $this->assertCacheCollectedData([new FetchCacheCollectedDataStub()], $this->decorator->getCollectedData());
+    }
 
-        $this->decorator->fetchWithNamespace('id', 'namespaceId');
-        $this->decorator->fetchWithNamespace('id', 'namespaceId');
-
-        $this->assertCollectedData(
-            [new FetchWithNamespaceCacheCollectedData('id', 'namespaceId', 'data-test', 0)],
+    /**
+     * @test
+     */
+    public function fetchWithNamespace_storeInformation()
+    {
+        $this->decorator->fetchWithNamespace(
+            FetchWithNamespaceCacheCollectedDataStub::ID,
+            FetchWithNamespaceCacheCollectedDataStub::NAMESPACE_ID
+        );
+        $this->assertCacheCollectedData(
+            [new FetchWithNamespaceCacheCollectedDataStub()],
             $this->decorator->getCollectedData()
         );
     }
 
     /**
-     * @param CacheCollectedData[]|FetchCacheCollectedData[]|FetchWithNamespaceCacheCollectedData[] $expectedCollectedData
-     * @param CacheCollectedData[]|FetchCacheCollectedData[]|FetchWithNamespaceCacheCollectedData[] $actualCollectedData
+     * @test
      */
-    private function assertCollectedData(array $expectedCollectedData, array $actualCollectedData)
+    public function Invalidate_storeInformation()
     {
-        $i = 0;
-        foreach ($expectedCollectedData as $expected) {
-            $actual = $actualCollectedData[$i++];
-            $this->assertEquals($expected->getData(), $actual->getData());
-            $this->assertNotNull($actual->getDuration());
-            $this->assertEquals($expected->getType(), $actual->getType());
-            if ($expected instanceof FetchCacheCollectedData) {
-                $this->assertEquals($expected->getId(), $actual->getId());
-            }
-            if ($expected instanceof FetchWithNamespaceCacheCollectedData || $expected instanceof InvalidateCacheCollectedData) {
-
-                $this->assertEquals($expected->getNamespaceId(), $actual->getNamespaceId());
-            }
-        }
+        $this->decorator->invalidate(InvalidateCacheCollectedDataStub::NAMESPACE_ID);
+        $this->assertCacheCollectedData([new InvalidateCacheCollectedDataStub()], $this->decorator->getCollectedData());
     }
 
     /**
-     * @inheritDoc
+     * @test
+     */
+    public function Save_storeInformation()
+    {
+        $this->decorator->save(SaveCacheCollectedDataStub::ID, SaveCacheCollectedDataStub::DATA);
+        $this->assertCacheCollectedData([new SaveCacheCollectedDataStub()], $this->decorator->getCollectedData());
+    }
+
+    /**
+     * @test
+     */
+    public function SaveWithNamespace_storeInformation()
+    {
+        $this->decorator->saveWithNamespace(
+            SaveWithNamespaceCacheCollectedDataStub::ID,
+            SaveWithNamespaceCacheCollectedDataStub::DATA,
+            SaveWithNamespaceCacheCollectedDataStub::NAMESPACE_ID
+        );
+        $this->assertCacheCollectedData(
+            [new SaveWithNamespaceCacheCollectedDataStub()],
+            $this->decorator->getCollectedData()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function setUp()
     {
         $factory = new DebugCacheProviderDecoratorFactory();
-        $factory->setStopwatch(new Stopwatch());
         $this->decorator = $factory->create('array');
+        $this->decorator->setProviderId(FetchCacheCollectedDataStub::PROVIDER_ID);
         DebugCacheProviderDecorator::$callId = 0;
         DebugCacheProviderDecorator::$collectedData = [];
-
-        $rp = new \ReflectionProperty($this->decorator, 'cacheProviderDecorator');
-        $rp->setAccessible(true);
-        $cacheProviderDecorator = $rp->getValue($this->decorator);
-
-        $rp = new \ReflectionProperty($cacheProviderDecorator, 'cacheProvider');
-        $rp->setAccessible(true);
-        /** @var CacheProvider $cacheProvider */
-        $this->cacheProvider = $rp->getValue($cacheProviderDecorator);
     }
-
 }

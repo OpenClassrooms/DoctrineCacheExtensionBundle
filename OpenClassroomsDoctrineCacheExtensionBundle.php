@@ -2,6 +2,7 @@
 
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle;
 
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\Compiler\DebugServiceCompilerPass;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\Compiler\ServiceCompilerPass;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\OpenClassroomsDoctrineCacheExtensionExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -13,13 +14,25 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class OpenClassroomsDoctrineCacheExtensionBundle extends Bundle
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
-        $container->addCompilerPass(new ServiceCompilerPass());
+        if ($this->isDebug($container)) {
+            $container->addCompilerPass(new DebugServiceCompilerPass());
+        } else {
+            $container->addCompilerPass(new ServiceCompilerPass());
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDebug(ContainerBuilder $container)
+    {
+        return $container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug');
     }
 
     public function getParent()
@@ -28,11 +41,10 @@ class OpenClassroomsDoctrineCacheExtensionBundle extends Bundle
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getContainerExtension()
     {
         return new OpenClassroomsDoctrineCacheExtensionExtension();
-}
-
+    }
 }

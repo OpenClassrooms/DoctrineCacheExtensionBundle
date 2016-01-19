@@ -22,21 +22,8 @@ class InvalidateCacheCollectedData extends CacheCollectedData
         return $this->namespaceId;
     }
 
-    public function setNamespaceId(string $namespaceId)
+    public function setNamespaceId($namespaceId)
     {
         $this->namespaceId = $namespaceId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }

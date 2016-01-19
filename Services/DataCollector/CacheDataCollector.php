@@ -12,13 +12,15 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  */
 class CacheDataCollector extends DataCollector
 {
+    const NAME = 'oc.doctrine_cache_extensions.services.data_collector.cache_data_collector';
+
     /**
      * @var CacheCollectedData[]
      */
     protected $data;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
@@ -51,18 +53,18 @@ class CacheDataCollector extends DataCollector
      */
     public function getAllFetchQueriesCount()
     {
-        return count($this->getQueriesByType(CacheCollectedData::FETCH));
+        return count($this->getQueriesByType([CacheCollectedData::FETCH, CacheCollectedData::FETCH_WITH_NAMESPACE]));
     }
 
     /**
      * @return CacheCollectedData[]
      */
-    private function getQueriesByType($type)
+    private function getQueriesByType(array $types)
     {
         $queries = [];
         foreach ($this->data as $item) {
-            if ($item->getType() === $type) {
-                $queries[] = $type;
+            if (in_array($item->getType(), $types)) {
+                $queries[] = $item;
             }
         }
 
@@ -74,17 +76,17 @@ class CacheDataCollector extends DataCollector
      */
     public function getAllFetchQueriesDuration()
     {
-        return $this->getQueriesDurationByType(CacheCollectedData::FETCH);
+        return $this->getQueriesDurationByType([CacheCollectedData::FETCH, CacheCollectedData::FETCH_WITH_NAMESPACE]);
     }
 
     /**
      * @return int
      */
-    private function getQueriesDurationByType($type)
+    private function getQueriesDurationByType(array $types)
     {
         $duration = 0;
         foreach ($this->data as $item) {
-            if ($item->getType() === $type) {
+            if (in_array($item->getType(), $types)) {
                 $duration += $item->getDuration();
             }
         }
@@ -97,7 +99,7 @@ class CacheDataCollector extends DataCollector
      */
     public function getAllSaveQueriesCount()
     {
-        return count($this->getQueriesByType(CacheCollectedData::SAVE));
+        return count($this->getQueriesByType([CacheCollectedData::SAVE, CacheCollectedData::SAVE_WITH_NAMESPACE]));
     }
 
     /**
@@ -105,19 +107,11 @@ class CacheDataCollector extends DataCollector
      */
     public function getAllSaveQueriesDuration()
     {
-        return $this->getQueriesDurationByType(CacheCollectedData::SAVE);
+        return $this->getQueriesDurationByType([CacheCollectedData::SAVE, CacheCollectedData::SAVE_WITH_NAMESPACE]);
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return 'oc.doctrine_cache_extensions.services.data_collector.cache_data_collector';
-    }
-
-    /**
-     * @return CacheCollectedData[]
+     * @return array
      */
     public function getQueriesDetails()
     {
@@ -128,5 +122,13 @@ class CacheDataCollector extends DataCollector
         ksort($queriesDetails);
 
         return $queriesDetails;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return self::NAME;
     }
 }

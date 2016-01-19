@@ -5,6 +5,7 @@ namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\DependencyInj
 use Doctrine\Bundle\DoctrineCacheBundle\DependencyInjection\DoctrineCacheExtension;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\OpenClassroomsDoctrineCacheExtensionExtension;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\OpenClassroomsDoctrineCacheExtensionBundle;
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\DebugCacheProviderDecorator;
 use OpenClassrooms\DoctrineCacheExtension\CacheProviderDecorator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framework_TestCase
+class OpenClassroomsDoctrineCacheExtensionsExtensionDebugTestCaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ContainerBuilder
@@ -54,9 +55,9 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
     public function CacheProviderDecorator($expectedCache, $inputServiceName, $type)
     {
         $this->checkExtension($type);
-        /** @var CacheProviderDecorator $cacheProviderDecorator */
-        $cacheProviderDecorator = $this->container->get($inputServiceName);
-        $this->assertCacheProviderDecorator($expectedCache, $cacheProviderDecorator);
+        /** @var DebugCacheProviderDecorator $debugCacheProviderDecorator */
+        $debugCacheProviderDecorator = $this->container->get($inputServiceName);
+        $this->assertDebugCacheProviderDecorator($expectedCache, $debugCacheProviderDecorator);
     }
 
     private function checkExtension($type)
@@ -72,11 +73,15 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
         }
     }
 
-    private function assertCacheProviderDecorator($expectedCache, CacheProviderDecorator $cacheProviderDecorator)
+    private function assertDebugCacheProviderDecorator($expectedCache, CacheProviderDecorator $cacheProviderDecorator)
     {
         $this->assertInstanceOf('Doctrine\Common\Cache\CacheProvider', $cacheProviderDecorator);
         $this->assertInstanceOf(
             'OpenClassrooms\DoctrineCacheExtension\CacheProviderDecorator',
+            $cacheProviderDecorator
+        );
+        $this->assertInstanceOf(
+            'OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\DebugCacheProviderDecorator',
             $cacheProviderDecorator
         );
         $this->assertAttributeInstanceOf($expectedCache, 'cacheProvider', $cacheProviderDecorator);
@@ -96,12 +101,21 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
      */
     protected function setUp()
     {
+        $this->container = $this->buildContainer();
+        $this->container->compile();
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    private function buildContainer()
+    {
         $container = new ContainerBuilder();
         $extension = new OpenClassroomsDoctrineCacheExtensionExtension();
+        $container->setParameter('kernel.debug', true);
         $container->registerExtension($extension);
         $container->registerExtension(new DoctrineCacheExtension());
         $container->loadFromExtension('doctrine_cache_extension');
-
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Fixtures/Resources/config'));
         $loader->load('config.yml');
         $serviceLoader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Fixtures/Resources/config'));
@@ -110,7 +124,6 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
         $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
         $bundle->build($container);
 
-        $container->compile();
-        $this->container = $container;
+        return $container;
     }
 }

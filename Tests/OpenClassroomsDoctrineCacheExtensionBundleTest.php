@@ -2,6 +2,7 @@
 
 namespace OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests;
 
+use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\OpenClassroomsDoctrineCacheExtensionExtension;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\OpenClassroomsDoctrineCacheExtensionBundle;
 
 /**
@@ -16,5 +17,6 @@ class OpenClassroomsDoctrineCacheExtensionBundleTest extends \PHPUnit_Framework_
     {
         $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
         $this->assertEquals('DoctrineCacheBundle', $bundle->getParent());
+        $this->assertInstanceOf(OpenClassroomsDoctrineCacheExtensionExtension::class, $bundle->getContainerExtension());
     }
 }

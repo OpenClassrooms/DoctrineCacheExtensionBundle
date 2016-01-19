@@ -45,13 +45,9 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
      */
     private $providerId;
 
-    /**
-     * @var string
-     */
-    private $providerType;
-
     public function __construct(AbstractCacheProviderDecorator $cacheProviderDecorator, Stopwatch $stopwatch)
     {
+        parent::__construct($cacheProviderDecorator->getCacheProvider(), $cacheProviderDecorator->getDefaultLifetime());
         $this->cacheProviderDecorator = $cacheProviderDecorator;
         $this->cacheCollectedDataBuilder = new CacheCollectedDataBuilder();
         self::$stopwatch = $stopwatch;
@@ -70,13 +66,8 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
         $this->providerId = $providerId;
     }
 
-    public function setProviderType(string $providerType)
-    {
-        $this->providerType = $providerType;
-    }
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function fetch($id)
     {
@@ -125,7 +116,7 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function fetchWithNamespace($id, $namespaceId = null)
     {
@@ -145,7 +136,7 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function invalidate($namespaceId)
     {
@@ -163,7 +154,7 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function save($id, $data, $lifeTime = null)
     {
@@ -182,7 +173,7 @@ class DebugCacheProviderDecorator extends CacheProviderDecorator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function saveWithNamespace($id, $data, $namespaceId = null, $lifeTime = null)
     {

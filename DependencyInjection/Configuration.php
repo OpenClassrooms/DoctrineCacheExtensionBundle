@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('doctrine_cache_extension');
         $rootNode
             ->children()
-                ->scalarNode('default_lifetime')->defaultValue(0)->end()
+            ->scalarNode('default_lifetime')->defaultValue(0)->end()
             ->end();
 
         return $treeBuilder;

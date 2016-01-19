@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 class OpenClassroomsDoctrineCacheExtensionExtension extends Extension
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function load(array $config, ContainerBuilder $container)
     {
