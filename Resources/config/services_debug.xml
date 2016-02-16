@@ -11,7 +11,7 @@
             </call>
         </service>
         <service id="oc.doctrine_cache_extensions.services.data_collector.cache_data_collector" class="OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheDataCollector" public="false">
-            <tag name="data_collector" template="@OpenClassroomsDoctrineCacheExtension/Collector/toolbar.html.twig" id="oc.doctrine_cache_extensions.services.data_collector.cache_data_collector"/>
+            <tag name="data_collector" template="@OpenClassroomsDoctrineCacheExtension/Collector/toolbar.html.twig" id="oc.doctrine_cache_extensions.services.data_collector.cache_data_collector" priority="249"/>
         </service>
     </services>
 </container>

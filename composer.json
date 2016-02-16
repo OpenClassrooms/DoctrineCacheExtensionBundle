@@ -28,9 +28,9 @@
     "symfony/stopwatch": ">=2.7 <4"
   },
   "require-dev": {
-    "mockery/mockery": "dev-master",
+    "mockery/mockery": "0.*",
     "phpunit/phpunit": "~5.0",
-    "satooshi/php-coveralls": "dev-master"
+    "satooshi/php-coveralls": "1.*"
   },
   "extra": {
     "branch-alias": {
