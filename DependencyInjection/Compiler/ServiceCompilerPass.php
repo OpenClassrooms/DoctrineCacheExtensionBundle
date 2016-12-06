@@ -17,6 +17,7 @@ class ServiceCompilerPass implements CompilerPassInterface
     public static $types =
         [
             'apc',
+            'apcu',
             'array',
             'couchbase',
             'file_system',
