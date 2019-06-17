@@ -8,13 +8,14 @@ use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\De
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\CacheCollectedDataTestCase;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\FetchCacheCollectedDataStub;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\SaveCacheCollectedDataStub;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
+class CacheDataCollectorTest extends TestCase
 {
     use CacheCollectedDataTestCase;
 

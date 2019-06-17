@@ -8,7 +8,7 @@ use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\Ca
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\InvalidateCacheCollectedData;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\SaveCacheCollectedData;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\SaveWithNamespaceCacheCollectedData;
-use PHPUnit_Framework_Assert as Assert;
+use PHPUnit\Framework\Assert;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
