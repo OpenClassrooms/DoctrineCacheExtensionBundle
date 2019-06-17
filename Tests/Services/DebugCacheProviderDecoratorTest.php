@@ -10,11 +10,12 @@ use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\Da
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\InvalidateCacheCollectedDataStub;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\SaveCacheCollectedDataStub;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Tests\Doubles\Services\DataCollector\CacheCollectedData\SaveWithNamespaceCacheCollectedDataStub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class DebugCacheProviderDecoratorTest extends \PHPUnit_Framework_TestCase
+class DebugCacheProviderDecoratorTest extends TestCase
 {
     use CacheCollectedDataTestCase;
 
