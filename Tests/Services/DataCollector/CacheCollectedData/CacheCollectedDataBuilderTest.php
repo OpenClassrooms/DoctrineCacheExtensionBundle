@@ -3,11 +3,12 @@
 namespace Services\DataCollector\CacheCollectedData;
 
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\Services\DataCollector\CacheCollectedData\CacheCollectedDataBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class CacheCollectedDataBuilderTest extends \PHPUnit_Framework_TestCase
+class CacheCollectedDataBuilderTest extends TestCase
 {
     /**
      * @test

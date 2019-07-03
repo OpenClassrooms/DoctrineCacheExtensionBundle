@@ -131,4 +131,10 @@ class CacheDataCollector extends DataCollector
     {
         return self::NAME;
     }
+
+    public function reset()
+    {
+        $this->data = [];
+    }
+
 }

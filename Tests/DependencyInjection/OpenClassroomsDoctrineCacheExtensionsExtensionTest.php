@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineCacheBundle\DependencyInjection\DoctrineCacheExtensi
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\DependencyInjection\OpenClassroomsDoctrineCacheExtensionExtension;
 use OpenClassrooms\Bundle\DoctrineCacheExtensionBundle\OpenClassroomsDoctrineCacheExtensionBundle;
 use OpenClassrooms\DoctrineCacheExtension\CacheProviderDecorator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * @author Romain Kuzniak <romain.kuzniak@openclassrooms.com>
  */
-class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framework_TestCase
+class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends TestCase
 {
     /**
      * @var ContainerBuilder
@@ -41,7 +42,7 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
      */
     public static function tearDownAfterClass()
     {
-        $tmpDirectory = __DIR__.'/../tmp';
+        $tmpDirectory = __DIR__ . '/../tmp';
         if (is_dir($tmpDirectory)) {
             rmdir($tmpDirectory);
         }
@@ -62,13 +63,13 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
     private function checkExtension($type)
     {
         if ('memcache' === $type && !extension_loaded('memcache')) {
-            $this->markTestSkipped('The '.__CLASS__.' requires the use of memcache');
+            $this->markTestSkipped('The ' . __CLASS__ . ' requires the use of memcache');
         }
         if ('memcached' === $type && !extension_loaded('memcached')) {
-            $this->markTestSkipped('The '.__CLASS__.' requires the use of memcached');
+            $this->markTestSkipped('The ' . __CLASS__ . ' requires the use of memcached');
         }
         if ('redis' === $type && !extension_loaded('redis')) {
-            $this->markTestSkipped('The '.__CLASS__.' requires the use of redis');
+            $this->markTestSkipped('The ' . __CLASS__ . ' requires the use of redis');
         }
     }
 
@@ -102,9 +103,9 @@ class OpenClassroomsDoctrineCacheExtensionsExtensionTest extends \PHPUnit_Framew
         $container->registerExtension(new DoctrineCacheExtension());
         $container->loadFromExtension('doctrine_cache_extension');
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Fixtures/Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Fixtures/Resources/config'));
         $loader->load('config.yml');
-        $serviceLoader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Fixtures/Resources/config'));
+        $serviceLoader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Fixtures/Resources/config'));
         $serviceLoader->load('services.xml');
 
         $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
