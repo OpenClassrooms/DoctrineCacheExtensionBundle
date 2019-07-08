@@ -17,7 +17,6 @@ class OpenClassroomsDoctrineCacheExtensionBundleTest extends TestCase
     public function getParent()
     {
         $bundle = new OpenClassroomsDoctrineCacheExtensionBundle();
-        $this->assertEquals('DoctrineCacheBundle', $bundle->getParent());
         $this->assertInstanceOf(OpenClassroomsDoctrineCacheExtensionExtension::class, $bundle->getContainerExtension());
     }
 }
