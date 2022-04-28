@@ -35,11 +35,6 @@ class OpenClassroomsDoctrineCacheExtensionBundle extends Bundle
         return $container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug');
     }
 
-    public function getParent()
-    {
-        return 'DoctrineCacheBundle';
-    }
-
     /**
      * {@inheritdoc}
      */
